@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Full Page Map with Alpine.js</title>
+  <script src="https://cdn.jsdelivr.net/npm/alpinejs@2"></script>
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+    #map {
+      height: 100%;
+    }
+  </style>
+</head>
+<body x-data="{ map: null }" x-init="initMap()">
+  <div id="map"></div>
+  <script>
+    function initMap() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+          var initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+          window.map = new google.maps.Map(document.getElementById('map'), {
+            center: initialLocation,
+            zoom: 14
+          });
+          // Customize the map as needed
+          var marker = new google.maps.Marker({
+            position: initialLocation,
+            map: map,
+            title: 'You are here!'
+          });
+        }, function() {
+          handleLocationError(true, map.getCenter());
+        });
+      } else {
+        // Browser doesn't support Geolocation
+        handleLocationError(false, map.getCenter());
+      }
+    }
+
+    function handleLocationError(browserHasGeolocation, initialLocation) {
+      var error = browserHasGeolocation ?
+                    'Error: The Geolocation service failed.' :
+                    'Error: Your browser doesn\'t support geolocation.';
+      alert(error);
+      window.map = new google.maps.Map(document.getElementById('map'), {
+        center: initialLocation,
+        zoom: 14
+      });
+    }
+  </script>
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBkuueUWmRWn6uwzDv-PA29H1dq0GOr_H0&callback=initMap"></script>
+</body>
+</html>
