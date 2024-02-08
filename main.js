@@ -5,6 +5,4 @@ import "./style.css"
 window.Alpine = Alpine
 Alpine.start()
 
-var map;
-
-map = initMap()
+var map = initMap()
