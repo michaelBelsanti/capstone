@@ -1,5 +1,5 @@
 import Alpine from 'alpinejs'
-import { initMap } from './map_utils'
+import { initMap } from './src/map_utils'
 import "./style.css"
 
 window.Alpine = Alpine
