@@ -3,11 +3,27 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite App</title>
-  </head>
-  <body>
-    <div id="map"></div>
-    <script type="module" src="./main.js" defer></script>
+    <link href="./src/output.css" rel="stylesheet">
+    <title>Capstone Map</title>
+    <script type="module" src="./src/main.js" defer></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script defer src="https://unpkg.com/htmx.org@1.9.10"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBkuueUWmRWn6uwzDv-PA29H1dq0GOr_H0" async defer></script>
+  </head>
+  <body class="relative" x-data="{ sidebarOpen: false }">
+
+    <div id="map" class="h-full"></div>
+
+    <!-- Sidebar -->
+    <div x-show="sidebarOpen" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform translate-x-full" x-transition:enter-end="opacity-100 transform translate-x-0" x-transition:leave="transition ease-in duration-300" x-transition:leave-start="opacity-100 transform translate-x-0" x-transition:leave-end="opacity-0 transform translate-x-full" class="top-0 right-0 w-1/3 bg-white p-10 pl-20 text-white fixed h-full">
+    </div>
+
+    <!-- Hamburger Menu -->
+    <button @click="sidebarOpen = !sidebarOpen" class="fixed top-4 right-4 z-10 flex items-center justify-center w-10 h-10 bg-white text-gray-600 focus:outline-none">
+      <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
+    </button>
+
   </body>
 </html>
