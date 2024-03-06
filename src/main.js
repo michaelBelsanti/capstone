@@ -1,8 +1,8 @@
 import Alpine from 'alpinejs'
 import { initMap } from './map_utils'
-import "./style.css"
 
 window.Alpine = Alpine
 Alpine.start()
+console.log("Alpine has been started.")
 
 var map = initMap()
