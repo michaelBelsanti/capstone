@@ -2,16 +2,48 @@ export function initMap() {
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function(position) {
       var initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+
       map = new google.maps.Map(document.getElementById('map'), {
         center: initialLocation,
-        zoom: 14
+        zoom: 14,
+        fullscreenControl: false
       });
+
       // Customize the map as needed
+
       var marker = new google.maps.Marker({
         position: initialLocation,
         map: map,
-        icon: 'https://img.icons8.com/fluent/48/000000/marker-storm.png',
-        draggarble: true
+        title: 'You are here!'
+      });
+
+      // Create a request object to search for nearby parks
+      const request = {
+        location: map.getCenter(),
+        radius: 5000, // Search radius in meters (adjust as needed)
+        type: ["park"], // Limit search to parks
+      };
+
+      // Create a Places service object
+      const service = new google.maps.places.PlacesService(map);
+
+      // Perform the search and display markers
+      service.nearbySearch(request, (results, status) => {
+        if (status === google.maps.places.PlacesServiceStatus.OK) {
+          for (let i = 0; i < results.length; i++) {
+            const place = results[i];
+            const marker = new google.maps.Marker({
+              map: map,
+              position: place.geometry.location,
+              title: place.name,
+              icon: {
+                url: "http://maps.google.com/mapfiles/ms/icons/green-dot.png"
+              }
+            });
+          }
+        } else {
+          console.error("Places service error:", status);
+        }
       });
     }, function() {
       handleLocationError(true, map ? map.getCenter() : null);
@@ -20,12 +52,14 @@ export function initMap() {
     // Browser doesn't support Geolocation
     handleLocationError(false, null);
   }
+
   var information = new google.maps.InfoWindow({
     content: '<h4>New Marker</h4>'
   });
   marker.addListener('click', function() {
     information.open(map, marker);
   });
+
   return map;
 }
 
@@ -37,9 +71,7 @@ export function handleLocationError(browserHasGeolocation, initialLocation) {
   if (initialLocation) {
     map = new google.maps.Map(document.getElementById('map'), {
       center: initialLocation,
-      zoom: 14
+      zoom: 14,
     });
   }
-}
-
-
+};

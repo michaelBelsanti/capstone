@@ -8,7 +8,7 @@
     <script type="module" src="./src/main.js" defer></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script defer src="https://unpkg.com/htmx.org@1.9.10"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBkuueUWmRWn6uwzDv-PA29H1dq0GOr_H0" async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBkuueUWmRWn6uwzDv-PA29H1dq0GOr_H0&callback=initMap&libraries=places" async defer></script>
   </head>
   <body class="relative" x-data="{ sidebarOpen: false }">
 
@@ -24,6 +24,5 @@
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
       </svg>
     </button>
-
   </body>
 </html>
