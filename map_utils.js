@@ -37,7 +37,7 @@ export function initMap() {
                             position: place.geometry.location,
                             title: place.name,
                             icon: {
-                                url: "https://image.pngaaa.com/900/2340900-middle.png"
+                                url: "http://maps.google.com/mapfiles/ms/icons/green-dot.png"
                             }
                         });
                     }
