@@ -9,10 +9,11 @@
     "preview": "vite preview"
   },
   "devDependencies": {
+    "tailwindcss": "^3.4.1",
     "vite": "^5.0.8"
   },
   "dependencies": {
-    "@googlemaps/js-api-loader": "^1.16.2",
-    "alpinejs": "^3.13.5"
+    "alpinejs": "^3.13.5",
+    "htmx.org": "^1.9.10"
   }
 }
