@@ -5,4 +5,5 @@ window.Alpine = Alpine
 Alpine.start()
 console.log("Alpine has been started.")
 
-var map = initMap()
+// Initialize the map
+window.initMap = initMap;
