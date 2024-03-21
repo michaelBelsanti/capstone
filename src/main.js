@@ -6,3 +6,4 @@ Alpine.start()
 console.log("Alpine has been started.")
 
 var map = initMap()
+window.initAutocomplete = initAutocomplete;
