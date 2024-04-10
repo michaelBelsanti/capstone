@@ -10,9 +10,9 @@
       package = { buildNpmPackage }:
         buildNpmPackage {
           name = "capstone";
-          version = "1.0.0";
+          version = "1.0.1";
           src = ./.;
-          npmDepsHash = "sha256-YU61KGCOT6wapsmPhZsmaptHX5vaYQyEobBq2ZmCIEw=";
+          npmDepsHash = "sha256-2y+ehYP1XmKpEJPj54geO8V31S1CT9xkywW1x9gfUhc=";
           installPhase = ''
             mkdir $out
             npm run build
