@@ -6,4 +6,4 @@ Alpine.start()
 console.log("Alpine has been started.")
 
 // Initialize the map
-window.initMap = initMap;
+var map = initMap()

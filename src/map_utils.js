@@ -1,3 +1,5 @@
+let markers = [];
+
 export function initMap() {
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function(position) {
@@ -9,8 +11,15 @@ export function initMap() {
         fullscreenControl: false,
         styles: [
           {
+            "elementType": "labels",
+            "stylers": [
+              {
+                "visibility": "off"
+              }
+            ]
+          },
+          {
             "featureType": "administrative.land_parcel",
-            "elementType": "labels",
             "stylers": [
               {
                 "visibility": "off"
@@ -18,8 +27,7 @@ export function initMap() {
             ]
           },
           {
-            "featureType": "poi",
-            "elementType": "labels.text",
+            "featureType": "administrative.neighborhood",
             "stylers": [
               {
                 "visibility": "off"
@@ -27,8 +35,24 @@ export function initMap() {
             ]
           },
           {
-            "featureType": "road.local",
-            "elementType": "labels",
+            "featureType": "poi.business",
+            "stylers": [
+              {
+                "visibility": "off"
+              }
+            ]
+          },
+          {
+            "featureType": "road",
+            "elementType": "labels.icon",
+            "stylers": [
+              {
+                "visibility": "off"
+              }
+            ]
+          },
+          {
+            "featureType": "transit",
             "stylers": [
               {
                 "visibility": "off"
@@ -53,6 +77,12 @@ export function initMap() {
         information.open(map, marker);
       });
 
+      // Add a click event listener to the map to drop a marker when clicked
+      google.maps.event.addListener(map, 'click', function(event) {
+        var clickedLocation = event.latLng;
+        placeMarker(clickedLocation, map, 'Custom Marker', 'Clicked Coordinates: ' + clickedLocation.lat() + ', ' + clickedLocation.lng());
+      });
+
     }, function() {
       handleLocationError(true, map ? map.getCenter() : null);
     });
@@ -61,19 +91,20 @@ export function initMap() {
     handleLocationError(false, null);
   }
 
-// Get references to your buttons
-const parkButton = document.querySelector('button[data-type="Parks"]');
-const hikingButton = document.querySelector('button[data-type="Hiking Areas"]');
-const landmarkButton = document.querySelector('button[data-type="Historical Landmarks"]');
-const clearMarkersButton = document.getElementById('clearMarkersButton');
+  // Get references to buttons
+  const parkButton = document.querySelector('button[data-type="Parks"]');
+  const hikingButton = document.querySelector('button[data-type="Hiking Areas"]');
+  const landmarkButton = document.querySelector('button[data-type="Historical Landmarks"]');
+  const clearMarkersButton = document.getElementById('clearMarkersButton');
 
-// Attach click event listeners to the buttons
-parkButton.addEventListener('click', () => searchForParks('park'));
-hikingButton.addEventListener('click', () => searchForParks('hiking_area'));
-landmarkButton.addEventListener('click', () => searchForParks('natural_feature'));
-clearMarkersButton.addEventListener('click', clearMarkers);
+  // Attach click event listeners to the buttons
+  parkButton.addEventListener('click', () => searchForParks('park'));
+  hikingButton.addEventListener('click', () => searchForParks('hiking_area'));
+  landmarkButton.addEventListener('click', () => searchForParks('natural_feature'));
+  clearMarkersButton.addEventListener('click', clearMarkers);
 
-return map;
+  fetchMarkers();
+  return map;
 }
 
 export function handleLocationError(browserHasGeolocation, initialLocation) {
@@ -88,6 +119,7 @@ export function handleLocationError(browserHasGeolocation, initialLocation) {
     });
   }
 };
+
 //TODO: Update function name to searchByType
 export function searchForParks(locationType) {
   // Create a request object to search for nearby parks
@@ -135,11 +167,142 @@ export function searchForParks(locationType) {
   });
 }
 
-let markers = []; // Create an array to store markers
-
 export function clearMarkers() {
   for (let i = 0; i < markers.length; i++) {
     markers[i].setMap(null); // Remove the marker from the map
   }
   markers = []; // Clear the markers array
 }
+
+
+function placeMarker(location, map, title, content) {
+  
+  var marker = new google.maps.Marker({
+    position: location,
+    map: map,
+    title: title
+  });
+
+  markers.push({
+    location: location,
+    title: title
+  });
+
+  // Show starting and ending coordinates in a pop-up menu
+  if (markers.length > 1) {
+    var startLocation = markers[markers.length - 2].location;
+    var endLocation = markers[markers.length - 1].location;
+    var infoContent = 'Start Coordinates: ' + startLocation.lat() + ', ' + startLocation.lng() +
+      '<br>End Coordinates: ' + endLocation.lat() + ', ' + endLocation.lng();
+
+    var infowindow = new google.maps.InfoWindow({
+      content: infoContent
+    });
+
+    marker.addListener('click', function() {
+      infowindow.open(map, marker);
+    });
+  }
+  
+}
+
+// POSTS markers to database with info from sidebar
+function handleSubmit() {
+  // Extract the data from the form
+  var title = document.getElementById('NewMarkerTitle').value;
+  var description = document.getElementById('NewMarkerDescription').value;
+  var category = document.getElementById('NewMarkerCategory').value;
+
+  // Create an object with the data
+  var data = {
+    title: title,
+    description: description,
+    category: category
+  };
+
+  // Send a POST request with the data
+  fetch('/submit', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  })
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch((error) => {
+    console.error('Error:', error);
+  });
+}
+document.getElementById('POSTmarkers').addEventListener('click', handleSubmit());
+
+// Fetches markers from the database and displays them on the map
+function fetchMarkers() {
+  fetch('/markers', {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+  .then(response => response.json())
+  .then(data => {
+    // Loop through the data and create a marker for each one
+    for (let i = 0; i < data.length; i++) {
+      let markerData = data[i];
+      let markerPosition = new google.maps.LatLng(markerData.latitude, markerData.longitude);
+      let marker = new google.maps.Marker({
+        position: markerPosition,
+        map: map,
+        title: markerData.title
+      });
+
+      // Add an info window for each marker
+      let infoWindow = new google.maps.InfoWindow({
+        content: '<h4>' + markerData.title + '</h4><p>' + markerData.description + '</p>'
+      });
+
+      marker.addListener('click', function() {
+        infoWindow.open(map, marker);
+      });
+    }
+  })
+  .catch((error) => {
+    console.error('Error:', error);
+  });
+}
+
+
+// Add the event listener to the button
+// document.getElementById('POSTmarkers').addEventListener('click', handleSubmit);
+
+
+// ARCHIVING IN CASE I MESS SOMETHING UP
+// Definitely lets me add more markers, just doesn't clear old ones
+// function placeMarker(location, map, title, content) {
+//   var marker = new google.maps.Marker({
+//     position: location,
+//     map: map,
+//     title: title
+//   });
+
+//   markers.push({
+//     location: location,
+//     title: title
+//   });
+
+//   // Show starting and ending coordinates in a pop-up menu
+//   if (markers.length > 1) {
+//     var startLocation = markers[markers.length - 2].location;
+//     var endLocation = markers[markers.length - 1].location;
+//     var infoContent = 'Start Coordinates: ' + startLocation.lat() + ', ' + startLocation.lng() +
+//       '<br>End Coordinates: ' + endLocation.lat() + ', ' + endLocation.lng();
+
+//     var infowindow = new google.maps.InfoWindow({
+//       content: infoContent
+//     });
+
+//     marker.addListener('click', function() {
+//       infowindow.open(map, marker);
+//     });
+//   }
+// }

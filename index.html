@@ -22,6 +22,30 @@
         <button @click="searchForParks('Hiking Areas')" data-type="Hiking Areas" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Hiking Areas</button>
         <button @click="searchForParks('Historical Landmarks')" data-type="Historical Landmarks" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">Historical Landmarks</button>
         <button id="clearMarkersButton" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Clear Markers</button>
+      </br>
+        
+      <form action="/submit" method="POST">
+        <!-- Forms for markers -->
+        <input id="NewMarkerTitle" name="MarkerTitle" placeholder="Enter location name"/></br>
+        <input id="NewMarkerDescription" name="MarkerDescription" placeholder="Enter location description"/> </br>
+        <input id="NewMarkerCategory" name="MarkerCategory" placeholder="Enter location category"/> </br>
+        
+        <!-- Upload a screenshot -->
+        <div x-data="{ file: null }">
+          <input type="file" @change="file = $event.target.files[0]" />
+        
+          
+          <button
+            x-show="file"
+            x-text="file ? file.name : 'Choose a file'"
+            @click="uploadFile"
+          ></button>
+        </div>
+    
+        <!-- Submit button -->
+        <button @click="handleSubmit" type="submit" id="POSTmarkers">Submit</button>
+    </form>
+    
       </div>
     </div>
 
