@@ -10,61 +10,63 @@
   <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
   <script defer src="https://unpkg.com/htmx.org@1.9.10"></script>
   <script
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBkuueUWmRWn6uwzDv-PA29H1dq0GOr_H0&callback=initMap&libraries=places"
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBkuueUWmRWn6uwzDv-PA29H1dq0GOr_H0&callback=initMap&libraries=places&loading=async"
     async defer></script>
 </head>
 
-<body class="relative" x-data="{ sidebarOpen: false }">
+<body class="relative" x-data="{ sidebarOpen: true }">
 
-  <div id="map" class="h-full"></div>
+  <div class="flex flex-row h-full">
+    <div id="map" class="w-3/4 h-full"></div>
 
+    <!-- Sidebar -->
+    <div class="top-0 right-0 w-1/4 bg-white p-10 fixed h-full flex flex-col">
+      <div class="flex-grow">
+        <form action="/submit" method="POST" class="flex flex-col space-y-4">
+          <!-- Forms for markers -->
+          <input id="NewMarkerTitle" name="MarkerTitle" placeholder="Enter location name"
+            class="border border-gray-400 rounded-md py-2 px-4" />
+          <input id="NewMarkerDescription" name="MarkerDescription" placeholder="Enter location description"
+            class="border border-gray-400 rounded-md py-2 px-4" />
+          <input id="NewMarkerCategory" name="MarkerCategory" placeholder="Enter location category"
+            class="border border-gray-400 rounded-md py-2 px-4" />
 
-  <!-- Sidebar -->
-  <div x-show="sidebarOpen" x-transition:enter="transition ease-out duration-300"
-    x-transition:enter-start="opacity-0 transform translate-x-full"
-    x-transition:enter-end="opacity-100 transform translate-x-0" x-transition:leave="transition ease-in duration-300"
-    x-transition:leave-start="opacity-100 transform translate-x-0"
-    x-transition:leave-end="opacity-0 transform translate-x-full"
-    class="top-0 right-0 w-1/3 bg-white p-10 pl-20 text-white fixed h-full">
-    <div class="flex flex-col space-y-4">
-      <button @click="searchForParks('Parks')" data-type="Parks"
-        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Parks</button>
-      <button @click="searchForParks('Hiking Areas')" data-type="Hiking Areas"
-        class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Hiking Areas</button>
-      <button @click="searchForParks('Historical Landmarks')" data-type="Historical Landmarks"
-        class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">Historical Landmarks</button>
-      <button id="clearMarkersButton" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Clear
-        Markers</button>
-      </br>
+          <!-- Upload a screenshot -->
+          <div x-data="{ file: null }" class="flex items-center space-x-4">
+            <input type="file" @change="file = $event.target.files[0]"
+              class="border border-gray-400 rounded-md py-2 px-4" />
+            <button x-show="file" x-text="file ? file.name : 'Choose a file'" @click="uploadFile"
+              class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded"></button>
+          </div>
 
-      <form action="/submit" method="POST">
-        <!-- Forms for markers -->
-        <input id="NewMarkerTitle" name="MarkerTitle" placeholder="Enter location name" /></br>
-        <input id="NewMarkerDescription" name="MarkerDescription" placeholder="Enter location description" /> </br>
-        <input id="NewMarkerCategory" name="MarkerCategory" placeholder="Enter location category" /> </br>
+          <!-- Submit button -->
+          <button @click="handleSubmit" type="submit" id="POSTmarkers"
+            class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Submit</button>
+        </form>
+      </div>
 
-        <!-- Upload a screenshot -->
-        <div x-data="{ file: null }">
-          <input type="file" @change="file = $event.target.files[0]" />
+      <div class="flex flex-col space-y-4 mt-auto">
+        <button @click="searchForParks('Parks')" data-type="Parks"
+          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+          Parks
+        </button>
 
+        <button @click="searchForParks('Hiking Areas')" data-type="Hiking Areas"
+          class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+          Hiking Areas
+        </button>
 
-          <button x-show="file" x-text="file ? file.name : 'Choose a file'" @click="uploadFile"></button>
-        </div>
+        <button @click="searchForParks('Historical Landmarks')" data-type="Historical Landmarks"
+          class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">
+          Historical Landmarks
+        </button>
 
-        <!-- Submit button -->
-        <button @click="handleSubmit" type="submit" id="POSTmarkers">Submit</button>
-      </form>
-
+        <button id="clearMarkersButton" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+          Clear Markers
+        </button>
+      </div>
     </div>
   </div>
-
-  <!-- Hamburger Menu -->
-  <button @click="sidebarOpen = !sidebarOpen"
-    class="fixed top-4 right-4 z-10 flex items-center justify-center w-10 h-10 bg-white text-gray-600 focus:outline-none">
-    <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-    </svg>
-  </button>
 </body>
 
 </html>

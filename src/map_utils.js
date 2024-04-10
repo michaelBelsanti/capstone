@@ -221,7 +221,7 @@ function handleSubmit() {
   };
 
   // Send a POST request with the data
-  fetch('/submit', {
+  fetch('https://capstone.belsanti.dev/api/markers/add', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -234,11 +234,11 @@ function handleSubmit() {
     console.error('Error:', error);
   });
 }
-document.getElementById('POSTmarkers').addEventListener('click', handleSubmit());
+// document.getElementById('POSTmarkers').addEventListener('click', handleSubmit());
 
 // Fetches markers from the database and displays them on the map
 function fetchMarkers() {
-  fetch('/markers', {
+  fetch('https://api.belsanti.dev/markers/get', {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json'
@@ -246,25 +246,22 @@ function fetchMarkers() {
   })
   .then(response => response.json())
   .then(data => {
+    console.log(data)
     // Loop through the data and create a marker for each one
-    for (let i = 0; i < data.length; i++) {
-      let markerData = data[i];
+    data.forEach((markerData) => {
       let markerPosition = new google.maps.LatLng(markerData.latitude, markerData.longitude);
       let marker = new google.maps.Marker({
         position: markerPosition,
         map: map,
         title: markerData.title
       });
-
-      // Add an info window for each marker
       let infoWindow = new google.maps.InfoWindow({
         content: '<h4>' + markerData.title + '</h4><p>' + markerData.description + '</p>'
       });
-
       marker.addListener('click', function() {
-        infoWindow.open(map, marker);
+        infoWindow.open(map, markerData);
       });
-    }
+    })
   })
   .catch((error) => {
     console.error('Error:', error);
