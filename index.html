@@ -24,16 +24,16 @@
       <div class="flex-grow">
         <form action="/submit" method="POST" class="flex flex-col space-y-4">
           <!-- Forms for markers -->
-          <input id="NewMarkerTitle" name="MarkerTitle" placeholder="Enter location name"
+          <input id="title" name="MarkerTitle" placeholder="Enter location name"
             class="border border-gray-400 rounded-md py-2 px-4" />
-          <input id="NewMarkerDescription" name="MarkerDescription" placeholder="Enter location description"
+          <input id="description" name="MarkerDescription" placeholder="Enter location description"
             class="border border-gray-400 rounded-md py-2 px-4" />
-          <input id="NewMarkerCategory" name="MarkerCategory" placeholder="Enter location category"
+          <input id="category" name="MarkerCategory" placeholder="Enter location category"
             class="border border-gray-400 rounded-md py-2 px-4" />
 
           <!-- Upload a screenshot -->
           <div x-data="{ file: null }" class="flex items-center space-x-4">
-            <input type="file" @change="file = $event.target.files[0]"
+            <input id="image" type="file" @change="file = $event.target.files[0]"
               class="border border-gray-400 rounded-md py-2 px-4" />
             <button x-show="file" x-text="file ? file.name : 'Choose a file'" @click="uploadFile"
               class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded"></button>
