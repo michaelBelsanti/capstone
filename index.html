@@ -17,7 +17,7 @@
 
     <!-- Sidebar -->
     <div class="top-0 right-0 w-1/4 bg-white p-10 fixed h-full flex flex-col">
-      <div class="flex-grow">
+      <div class="flex flex-col space-y-4">
 
         <!-- Inputs for markers -->
         <input id="NewMarkerTitle" name="MarkerTitle" placeholder="Enter location name"
@@ -29,7 +29,7 @@
 
         <!-- Upload a screenshot -->
         <div x-data="{ file: null }" class="flex items-center space-x-4">
-          <input type="file" @change="file = $event.target.files[0]"
+          <input id="ImageUploadInput" type="file" @change="file = $event.target.files[0]"
             class="border border-gray-400 rounded-md py-2 px-4" />
           <button x-show="file" x-text="file ? file.name : 'Choose a file'" @click="uploadFile"
             class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded"></button>

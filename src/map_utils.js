@@ -35,8 +35,18 @@ export function initMap() {
 
             marker.addListener('click', function() {
               // Open an info window when marker is clicked
+              var infoWindowContent = '<div><h2>' + location.title + ', (' + location.category + ')</h2><p>' + location.description + '</p>';
+
+              // Check if valid is true and if image is provided
+              console.log(location.image.Valid)
+              if (location.image.Valid) {
+                infoWindowContent += '<img src="data:image/jpeg;base64,' + location.image.String + '" width="200">';
+              }
+
+              infoWindowContent += '</div>';
+
               var infoWindow = new google.maps.InfoWindow({
-                content: '<div><h2>' + location.title + ', (' + location.category + ')</h2><p>' + location.description + '</p><img src="' + location.image + '" width="200"></div>'
+                content: infoWindowContent
               });
               infoWindow.open(map, marker);
             });
@@ -186,10 +196,10 @@ export function addMarker(location) {
   });
 
   var content = '<div class="info-window-content">' +
-          '<div><strong>' + location.city + ', ' + location.state + '</strong></div><br>' +
-          '<img class="info-window-image" src="' + location.image + '" alt="' + location.city + '">' +
-          '<div>' + location.about + '</div>' +
-          '</div>';
+    '<div><strong>' + location.city + ', ' + location.state + '</strong></div><br>' +
+    '<img class="info-window-image" src="' + location.image + '" alt="' + location.city + '">' +
+    '<div>' + location.about + '</div>' +
+    '</div>';
 
   var infowindow = new google.maps.InfoWindow({
     content: content
