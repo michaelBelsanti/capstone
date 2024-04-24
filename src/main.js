@@ -1,9 +1,11 @@
 import Alpine from 'alpinejs'
-import { initMap } from './map_utils'
+import { initMap, setMarkerMode } from './map_utils'
 import './index.css'
 
 window.Alpine = Alpine
-window.handleSubmit = handleSubmit;
+window.handleSubmit = handleSubmit
+window.setMarkerMode = setMarkerMode
+
 Alpine.start()
 console.log("Alpine has been started.")
 
@@ -13,6 +15,8 @@ var map = initMap()
 // POSTS markers to database with info from sidebar
 function handleSubmit() {
   var title = document.getElementById('NewMarkerTitle').value;
+  var lat = document.getElementById('NewMarkerLat').value;
+  var long = document.getElementById('NewMarkerLong').value;
   var description = document.getElementById('NewMarkerDescription').value;
   var category = document.getElementById('NewMarkerCategory').value;
   var imageFile = document.getElementById('ImageUploadInput').files[0];
@@ -26,8 +30,8 @@ function handleSubmit() {
 
     // Create an object with the data including the base64 image
     var data = {
-      latitude: "40.7128",
-      longitude: "-74.0059",
+      latitude: lat,
+      longitude: long,
       title: title,
       description: description,
       category: category,

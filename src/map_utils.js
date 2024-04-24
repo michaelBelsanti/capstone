@@ -3,13 +3,20 @@ var locations = [];
 
 var map;
 var markers = [];
-var locationInput = document.getElementById('location');
-var setMarkerMode = false;
+var newMarkerLocation = {
+  lat: null,
+  long: null
+}
+var markerMode = false;
+
+export function setMarkerMode() {
+  markerMode = true;
+  console.log("Marker mode is " + markerMode)
+}
 
 export function initMap() {
   fetchJsonData()
-    .then(data => {
-      locations = data;
+    .then(locations => {
 
       // Initialize the map centered at the user's current location if available
       if (navigator.geolocation) {
@@ -54,8 +61,9 @@ export function initMap() {
 
           // Add click event listener to the map for setting location
           map.addListener('click', function(event) {
-            if (setMarkerMode) {
+            if (markerMode) {
               setLocationFromMap(event.latLng);
+              markerMode = false;
             }
           });
         }, function() {
@@ -75,7 +83,7 @@ export function initMap() {
 
           // Add click event listener to the map for setting location
           map.addListener('click', function(event) {
-            if (setMarkerMode) {
+            if (markerMode) {
               setLocationFromMap(event.latLng);
             }
           });
@@ -97,7 +105,7 @@ export function initMap() {
 
         // Add click event listener to the map for setting location
         map.addListener('click', function(event) {
-          if (setMarkerMode) {
+          if (markerMode) {
             setLocationFromMap(event.latLng);
           }
         });
@@ -135,14 +143,11 @@ async function fetchJsonData() {
   }
 }
 
-export function setLocation() {
-  setMarkerMode = true;
-  locationInput.value = '';
-}
-
 export function setLocationFromMap(latLng) {
-  setMarkerMode = false;
-  locationInput.value = latLng.lat() + ', ' + latLng.lng();
+  console.log(latLng.lat())
+  console.log(latLng.lng())
+  document.getElementById('NewMarkerLat').setAttribute("value", latLng.lat())
+  document.getElementById('NewMarkerLong').setAttribute("value", latLng.lng())
 }
 
 export function addLocation() {
