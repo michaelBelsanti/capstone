@@ -7,7 +7,6 @@ var locations = [];
 var map;
 var markers = [];
 var currentMarkerLocation;
-var markerMode = false;
 const mapStyles = [
   {
     "featureType": "administrative.land_parcel",
@@ -112,9 +111,6 @@ export function initMap() {
           // Add click event listener to the map for setting location
           map.addListener('click', function(event) {
             setLocationFromMap(event.latLng);
-            if (markerMode) {
-              markerMode = false;
-            }
           });
         }, function() {
           // If geolocation is not available, use the default location
@@ -128,9 +124,7 @@ export function initMap() {
 
           // Add click event listener to the map for setting location
           map.addListener('click', function(event) {
-            if (markerMode) {
               setLocationFromMap(event.latLng);
-            }
           });
         });
       } else {
@@ -141,13 +135,6 @@ export function initMap() {
             lng: -75.1652
           },
           zoom: 10
-        });
-
-        // Add click event listener to the map for setting location
-        map.addListener('click', function(event) {
-          if (markerMode) {
-            setLocationFromMap(event.latLng);
-          }
         });
       }
     })

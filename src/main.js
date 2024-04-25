@@ -1,10 +1,9 @@
 import Alpine from 'alpinejs'
-import { initMap, setMarkerMode } from './map_utils'
+import {initMap} from './map_utils'
 import './index.css'
 
 window.Alpine = Alpine
 window.handleSubmit = handleSubmit
-window.setMarkerMode = setMarkerMode
 
 Alpine.start()
 console.log("Alpine has been started.")
