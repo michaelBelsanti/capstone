@@ -25,15 +25,15 @@
 
         <!-- Inputs for markers -->
         <input id="NewMarkerLat" name="MarkerLat" placeholder="Enter location latitude"
-          class="border border-gray-400 dark:border-gray-600 bg-white dark:bg-gray-700 rounded-md py-2 px-4" />
+          class="border border-gray-400 dark:border-gray-600 bg-white dark:bg-gray-700 dark:text-white rounded-md py-2 px-4" />
         <input id="NewMarkerLong" name="MarkerLong" placeholder="Enter location longitude"
-          class="border border-gray-400 dark:border-gray-600 bg-white dark:bg-gray-700 rounded-md py-2 px-4" />
+          class="border border-gray-400 dark:border-gray-600 bg-white dark:bg-gray-700 dark:text-white rounded-md py-2 px-4" />
         <input id="NewMarkerTitle" name="MarkerTitle" placeholder="Enter location name"
-          class="border border-gray-400 dark:border-gray-600 bg-white dark:bg-gray-700 rounded-md py-2 px-4" />
+          class="border border-gray-400 dark:border-gray-600 bg-white dark:bg-gray-700 dark:text-white rounded-md py-2 px-4" />
         <input id="NewMarkerDescription" name="MarkerDescription" placeholder="Enter location description"
-          class="border border-gray-400 dark:border-gray-600 bg-white dark:bg-gray-700 rounded-md py-2 px-4" />
+          class="border border-gray-400 dark:border-gray-600 bg-white dark:bg-gray-700 dark:text-white rounded-md py-2 px-4" />
         <input id="NewMarkerCategory" name="MarkerCategory" placeholder="Enter location category"
-          class="border border-gray-400 dark:border-gray-600 bg-white dark:bg-gray-700 rounded-md py-2 px-4" />
+          class="border border-gray-400 dark:border-gray-600 bg-white dark:bg-gray-700 dark:text-white rounded-md py-2 px-4" />
 
         <!-- Upload an image -->
         <div x-data="{ file: null, preview: null }" class="flex flex-col items-center space-y-4 w-full">
@@ -49,12 +49,12 @@
           </div>
           <img x-show="preview" :src="preview" class="max-h-64 object-contain w-full" />
         </div>
-
-        <!-- Submit button -->
-        <button @click="handleSubmit"
-          class="bg-green-500 dark:bg-green-700 hover:bg-green-700 dark:hover:bg-green-800 text-white font-bold py-2 px-4 rounded mt-auto mb-4">
-          Submit
-        </button>
       </div>
+
+      <!-- Submit button -->
+      <button @click="handleSubmit"
+        class="bg-green-500 dark:bg-green-700 hover:bg-green-700 dark:hover:bg-green-800 text-white font-bold py-2 px-4 rounded mt-auto mb-4">
+        Submit
+      </button>
     </div>
 </body>
