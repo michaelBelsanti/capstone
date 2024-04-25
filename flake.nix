@@ -10,7 +10,7 @@
       package = { buildNpmPackage }:
         buildNpmPackage {
           name = "capstone";
-          version = "1.0.1";
+          version = "1.1.0";
           src = ./.;
           npmDepsHash = "sha256-2y+ehYP1XmKpEJPj54geO8V31S1CT9xkywW1x9gfUhc=";
           installPhase = ''
