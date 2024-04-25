@@ -1,13 +1,47 @@
 // Existing JSON array with location information and images
 var locations = [];
-
 var map;
 var markers = [];
-var newMarkerLocation = {
-  lat: null,
-  long: null
-}
+var currentMarkerLocation;
 var markerMode = false;
+const mapStyles = [
+  {
+    "featureType": "administrative.land_parcel",
+    "elementType": "labels",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  },
+  {
+    "featureType": "poi",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  },
+  {
+    "featureType": "poi",
+    "elementType": "labels.text",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  },
+  {
+    "featureType": "road.local",
+    "elementType": "labels",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  }
+];
+
 
 export function setMarkerMode() {
   markerMode = true;
@@ -24,7 +58,8 @@ export function initMap() {
           var initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
           map = new google.maps.Map(document.getElementById('map'), {
             center: initialLocation,
-            zoom: 15
+            zoom: 15,
+            styles: mapStyles
           });
 
           // Add markers and info windows for each location
@@ -61,8 +96,8 @@ export function initMap() {
 
           // Add click event listener to the map for setting location
           map.addListener('click', function(event) {
+            setLocationFromMap(event.latLng);
             if (markerMode) {
-              setLocationFromMap(event.latLng);
               markerMode = false;
             }
           });
@@ -74,11 +109,6 @@ export function initMap() {
               lng: -75.1652
             },
             zoom: 10
-          });
-
-          // Add markers and info windows for each location
-          locations.forEach(function(location) {
-            // ...
           });
 
           // Add click event listener to the map for setting location
@@ -96,11 +126,6 @@ export function initMap() {
             lng: -75.1652
           },
           zoom: 10
-        });
-
-        // Add markers and info windows for each location
-        locations.forEach(function(location) {
-          // ...
         });
 
         // Add click event listener to the map for setting location
@@ -144,10 +169,21 @@ async function fetchJsonData() {
 }
 
 export function setLocationFromMap(latLng) {
-  console.log(latLng.lat())
-  console.log(latLng.lng())
-  document.getElementById('NewMarkerLat').setAttribute("value", latLng.lat())
-  document.getElementById('NewMarkerLong').setAttribute("value", latLng.lng())
+  console.log(latLng.lat());
+  console.log(latLng.lng());
+  document.getElementById('NewMarkerLat').setAttribute("value", latLng.lat());
+  document.getElementById('NewMarkerLong').setAttribute("value", latLng.lng());
+
+  // Clear the previous marker
+  if (currentMarkerLocation) {
+    currentMarkerLocation.setMap(null);
+  }
+
+  // Create a new marker
+  currentMarkerLocation = new google.maps.Marker({
+    position: latLng,
+    map: map
+  });
 }
 
 export function addLocation() {
