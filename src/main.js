@@ -1,5 +1,5 @@
 import Alpine from 'alpinejs'
-import {initMap} from './map_utils'
+import { initMap, addMarker } from './map_utils'
 import './index.css'
 
 window.Alpine = Alpine
@@ -36,6 +36,12 @@ function handleSubmit() {
       category: category,
       image: base64Image,
     };
+
+    addMarker(data)
+
+    document.getElementById('NewMarkerTitle').value = null;
+    document.getElementById('NewMarkerDescription').value = null;
+    document.getElementById('NewMarkerCategory').value = null;
 
     // Send a POST request with the data
     fetch('https://capstone.belsanti.dev/markers/add', {

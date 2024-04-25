@@ -18,7 +18,7 @@
     <div class="top-0 right-0 w-1/4 bg-white dark:bg-gray-800 p-10 fixed h-full flex flex-col">
       <div x-data="setMarkerMode" class="flex flex-col space-y-4 overflow-y-auto">
         <!-- Create marker -->
-        <button @click="setMarkerMode"
+        <button @click="setMarkerMode" hidden
           class="bg-blue-500 dark:bg-blue-700 hover:bg-blue-700 dark:hover:bg-blue-800 text-white font-bold py-2 px-4 rounded">
           Set Marker Location
         </button>
@@ -50,12 +50,11 @@
           <img x-show="preview" :src="preview" class="max-h-64 object-contain w-full" />
         </div>
 
-      <!-- Submit button -->
-      <button @click="handleSubmit"
-        class="bg-green-500 dark:bg-green-700 hover:bg-green-700 dark:hover:bg-green-800 text-white font-bold py-2 px-4 rounded mt-auto mb-4">
-        Submit
-      </button>
+        <!-- Submit button -->
+        <button @click="handleSubmit"
+          class="bg-green-500 dark:bg-green-700 hover:bg-green-700 dark:hover:bg-green-800 text-white font-bold py-2 px-4 rounded mt-auto mb-4">
+          Submit
+        </button>
+      </div>
     </div>
-  </div>
 </body>
-

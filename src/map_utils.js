@@ -1,4 +1,4 @@
-import { styles } from './map_style'
+import { dark_styles, light_styles } from './map_style'
 const isDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
 const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
@@ -7,57 +7,14 @@ var locations = [];
 var map;
 var markers = [];
 var currentMarkerLocation;
-const mapStyles = [
-  {
-    "featureType": "administrative.land_parcel",
-    "elementType": "labels",
-    "stylers": [
-      {
-        "visibility": "off"
-      }
-    ]
-  },
-  {
-    "featureType": "poi",
-    "stylers": [
-      {
-        "visibility": "off"
-      }
-    ]
-  },
-  {
-    "featureType": "poi",
-    "elementType": "labels.text",
-    "stylers": [
-      {
-        "visibility": "off"
-      }
-    ]
-  },
-  {
-    "featureType": "road.local",
-    "elementType": "labels",
-    "stylers": [
-      {
-        "visibility": "off"
-      }
-    ]
-  }
-];
-
 
 // Function to update the map styles
 function updateMapStyles(event, map) {
   if (event.matches) {
-    map.setOptions({ styles });
+    map.setOptions({ styles: dark_styles });
   } else {
-    map.setOptions({ styles: [] });
+    map.setOptions({ styles: light_styles });
   }
-}
-
-export function setMarkerMode() {
-  markerMode = true;
-  console.log("Marker mode is " + markerMode)
 }
 
 export function initMap() {
@@ -72,7 +29,7 @@ export function initMap() {
           map = new google.maps.Map(document.getElementById('map'), {
             center: initialLocation,
             zoom: 15,
-            styles: isDarkMode ? styles : []
+            styles: isDarkMode ? dark_styles : light_styles
           });
           darkModeMediaQuery.addEventListener('change', (event) => updateMapStyles(event,map));
 
@@ -188,31 +145,6 @@ export function setLocationFromMap(latLng) {
   });
 }
 
-export function addLocation() {
-  var title = document.getElementById('title').value;
-  var description = document.getElementById('description').value;
-  var location = document.getElementById('location').value;
-  var image = document.getElementById('image').value;
-
-  if (city && state && location && image && about) {
-    var newLocation = {
-      "title": title,
-      "description": description,
-      "image": image,
-      "location": location,
-    };
-
-    locations.push(newLocation);
-    alert(JSON.stringify(locations));
-    addMarker(newLocation);
-
-    // Clear the form inputs
-    document.getElementById('title').value = '';
-    document.getElementById('description').value = '';
-    document.getElementById('category').value = '';
-    document.getElementById('image').value = '';
-  }
-}
 export function handleLocationError(browserHasGeolocation, initialLocation) {
   var error = browserHasGeolocation ?
     'Error: The Geolocation service failed.' :
@@ -226,31 +158,31 @@ export function handleLocationError(browserHasGeolocation, initialLocation) {
   }
 };
 
-export function addMarker(location) {
+export function addMarker(locationData) {
   var latLng = {
-    lat: parseFloat(location.location.split(',')[0]),
-    lng: parseFloat(location.location.split(',')[1])
+    lat: parseFloat(locationData.latitude),
+    lng: parseFloat(locationData.longitude)
   };
+
 
   var marker = new google.maps.Marker({
     position: latLng,
     map: map,
-    title: location.city
-  });
-
-  var content = '<div class="info-window-content">' +
-    '<div><strong>' + location.city + ', ' + location.state + '</strong></div><br>' +
-    '<img class="info-window-image" src="' + location.image + '" alt="' + location.city + '">' +
-    '<div>' + location.about + '</div>' +
-    '</div>';
-
-  var infowindow = new google.maps.InfoWindow({
-    content: content
+    title: locationData.title
   });
 
   marker.addListener('click', function() {
-    infowindow.open(map, marker);
-  });
+    // Open an info window when marker is clicked
+    var infoWindowContent = '<div><h2>' + locationData.title + ', (' + locationData.category + ')</h2><p>' + locationData.description + '</p>';
 
-  markers.push(marker);
+    // Check if valid is true and if image is provided
+    infoWindowContent += '<img src="data:image/jpeg;base64,' + locationData.image + '" width="200">';
+
+    infoWindowContent += '</div>';
+
+    var infoWindow = new google.maps.InfoWindow({
+      content: infoWindowContent
+    });
+    infoWindow.open(map, marker);
+  });
 }
