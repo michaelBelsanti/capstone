@@ -1,3 +1,7 @@
+import { styles } from './map_style'
+const isDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
 // Existing JSON array with location information and images
 var locations = [];
 var map;
@@ -43,6 +47,15 @@ const mapStyles = [
 ];
 
 
+// Function to update the map styles
+function updateMapStyles(event, map) {
+  if (event.matches) {
+    map.setOptions({ styles });
+  } else {
+    map.setOptions({ styles: [] });
+  }
+}
+
 export function setMarkerMode() {
   markerMode = true;
   console.log("Marker mode is " + markerMode)
@@ -56,11 +69,13 @@ export function initMap() {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(position) {
           var initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+          console.log(isDarkMode)
           map = new google.maps.Map(document.getElementById('map'), {
             center: initialLocation,
             zoom: 15,
-            styles: mapStyles
+            styles: isDarkMode ? styles : []
           });
+          darkModeMediaQuery.addEventListener('change', (event) => updateMapStyles(event,map));
 
           // Add markers and info windows for each location
           locations.forEach(function(location) {
